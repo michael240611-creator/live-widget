@@ -25,8 +25,11 @@ class MediaWidgetProvider : AppWidgetProvider() {
                         views.setViewVisibility(R.id.widget_image, View.GONE)
                         try {
                             val gifDrawable = GifDrawable(file)
-                            views.setImageViewBitmap(R.id.widget_gif, gifDrawable.firstFrame)
-                        } catch (e: Exception) { }
+                            // Исправленный метод получения кадра
+                            views.setImageViewBitmap(R.id.widget_gif, gifDrawable.getBitmap())
+                        } catch (e: Exception) {
+                            // Если не удалось загрузить, показываем пустоту
+                        }
                     } else {
                         views.setViewVisibility(R.id.widget_image, View.VISIBLE)
                         views.setViewVisibility(R.id.widget_gif, View.GONE)
@@ -36,6 +39,9 @@ class MediaWidgetProvider : AppWidgetProvider() {
                         }
                     }
                 }
+            } else {
+                views.setViewVisibility(R.id.widget_image, View.GONE)
+                views.setViewVisibility(R.id.widget_gif, View.GONE)
             }
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
