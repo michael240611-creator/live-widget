@@ -11,11 +11,10 @@
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/widget_gif"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:visibility="gone" />
-
 </FrameLayout>
