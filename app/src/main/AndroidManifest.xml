@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Разрешение на чтение видео -->
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
-        android:hardwareAccelerated="true"
+        android:label="Video Live Wallpaper"
+        android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.LiveWidget">
 
         <activity android:name=".MainActivity" android:exported="true">
@@ -17,17 +18,17 @@
             </intent-filter>
         </activity>
 
-        <!-- ВАЖНО: exported="true" обязателен для Magic OS -->
-        <receiver 
-            android:name=".MediaWidgetProvider" 
+        <!-- Сервис живых обоев -->
+        <service
+            android:name=".VideoLiveWallpaperService"
             android:exported="true"
-            android:label="@string/app_name">
+            android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
             <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
-        </receiver>
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper_info" />
+        </service>
     </application>
 </manifest>
