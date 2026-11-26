@@ -1,16 +1,12 @@
 package org.plum.livewidget
 
-import android.app.WallpaperManager
-import android.content.ComponentName
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
+import android.provider.Settings
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -26,45 +22,37 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setBackgroundColor(Color.parseColor("#1E1E1E"))
-            setPadding(50, 100, 50, 50)
-            gravity = Gravity.CENTER
+        // Проверка разрешения на оверлей
+        if (!Settings.canDrawOverlays(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+            startActivity(intent)
+            Toast.makeText(this, "Разрешите показ поверх других приложений", Toast.LENGTH_LONG).show()
         }
 
-        val title = TextView(this).apply {
-            text = "Video Live Wallpaper"
-            textSize = 28f
-            setTextColor(Color.parseColor("#FFCA28"))
-            setTypeface(typeface, Typeface.BOLD)
-            gravity = Gravity.CENTER
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 100, 50, 50)
         }
 
         val btnSelect = Button(this).apply {
-            text = "Выбрать Видео"
-            setTextColor(Color.WHITE)
-            setBackgroundColor(Color.parseColor("#4CAF50"))
-            setTypeface(typeface, Typeface.BOLD)
+            text = "1. Выбрать Видео"
             setOnClickListener { pickVideo.launch("video/*") }
         }
 
-        val btnSetWallpaper = Button(this).apply {
-            text = "Установить как обои"
-            setTextColor(Color.WHITE)
-            setBackgroundColor(Color.parseColor("#2196F3"))
-            setTypeface(typeface, Typeface.BOLD)
+        val btnStartOverlay = Button(this).apply {
+            text = "2. Запустить видео на экране"
             setOnClickListener {
-                val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
-                    putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT, ComponentName(this@MainActivity, VideoLiveWallpaperService::class.java))
+                if (!Settings.canDrawOverlays(this@MainActivity)) {
+                    Toast.makeText(this@MainActivity, "Сначала разрешите оверлей!", Toast.LENGTH_SHORT).show()
+                } else {
+                    startService(Intent(this@MainActivity, VideoOverlayService::class.java))
+                    Toast.makeText(this@MainActivity, "Видео запущено! Сверните приложение.", Toast.LENGTH_SHORT).show()
                 }
-                startActivity(intent)
             }
         }
 
-        layout.addView(title)
         layout.addView(btnSelect)
-        layout.addView(btnSetWallpaper)
+        layout.addView(btnStartOverlay)
         setContentView(layout)
     }
 
@@ -76,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             }
             val prefs = getSharedPreferences("WallpaperPrefs", MODE_PRIVATE)
             prefs.edit().putString("video_path", file.absolutePath).apply()
-            Toast.makeText(this, "Видео сохранено! Нажмите 'Установить как обои'", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Видео сохранено!", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Toast.makeText(this, "Ошибка: ${e.message}", Toast.LENGTH_SHORT).show()
         }
