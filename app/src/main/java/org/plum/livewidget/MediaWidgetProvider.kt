@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.RemoteViews
-import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 
 class MediaWidgetProvider : AppWidgetProvider() {
@@ -24,12 +23,12 @@ class MediaWidgetProvider : AppWidgetProvider() {
                         views.setViewVisibility(R.id.widget_gif, View.VISIBLE)
                         views.setViewVisibility(R.id.widget_image, View.GONE)
                         try {
-                            val gifDrawable = GifDrawable(file)
-                            // Исправленный метод получения кадра
-                            views.setImageViewBitmap(R.id.widget_gif, gifDrawable.getBitmap())
-                        } catch (e: Exception) {
-                            // Если не удалось загрузить, показываем пустоту
-                        }
+                            // Отображаем только первый кадр GIF как статичную картинку
+                            val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            if (bitmap != null) {
+                                views.setImageViewBitmap(R.id.widget_gif, bitmap)
+                            }
+                        } catch (e: Exception) { }
                     } else {
                         views.setViewVisibility(R.id.widget_image, View.VISIBLE)
                         views.setViewVisibility(R.id.widget_gif, View.GONE)
