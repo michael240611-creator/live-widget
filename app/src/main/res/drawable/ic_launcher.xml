@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Фон (уютный темно-коричневый) -->
+    <path
+        android:fillColor="#3E2723"
+        android:pathData="M0,0h108v108h-108z" />
+
+    <!-- Дрова (кирпичный цвет) -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M30,80 L78,80 L78,90 L30,90 Z" />
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M40,70 L68,70 L68,80 L40,80 Z" />
+
+    <!-- Огонь (яркий градиент от желтого к красному) -->
+    <path
+        android:fillColor="#FFB300"
+        android:pathData="M54,40 C64,60 74,65 64,80 L44,80 C34,65 44,60 54,40 Z" />
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M54,55 C58,65 62,70 58,80 L50,80 C46,70 50,65 54,55 Z" />
+
+    <!-- Снежинка (белая) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,15 L54,30 M54,15 L47,8 M54,15 L61,8 M54,30 L47,37 M54,30 L61,37" />
+</vector>
